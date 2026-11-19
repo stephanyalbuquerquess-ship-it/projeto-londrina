@@ -21,10 +21,14 @@ def carregar_resumo():
     df = pd.read_csv("londrina_resumo_agricola.csv", index_col=0)
     df.index.name = "mes"
     df = df.reset_index()
-    nomes_meses = ["Jan","Fev","Mar","Abr","Mai","Jun",
-                   "Jul","Ago","Set","Out","Nov","Dez"]
-    df["mes_nome"] = df["mes"].apply(lambda m: nomes_meses[int(m)-1])
+    nomes_meses = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
+                   "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
+    df["mes_nome"] = df["mes"].apply(lambda m: nomes_meses[int(m) - 1])
+    # Garante a coluna TMED_med (média entre TMAX e TMIN)
+    if "TMED_med" not in df.columns:
+        df["TMED_med"] = (df["TMAX_med"] + df["TMIN_med"]) / 2
     return df
+
 
 @st.cache_data
 def carregar_diario():
@@ -32,6 +36,7 @@ def carregar_diario():
     df["ano"] = df["DATA"].dt.year
     df["mes"] = df["DATA"].dt.month
     return df
+
 
 resumo = carregar_resumo()
 diario = carregar_diario()
@@ -59,34 +64,23 @@ col4.metric("ITU médio anual", f"{resumo['ITU_med'].mean():.1f}")
 st.markdown("---")
 
 # ------------------------------------------------------------------
-# Aba 1 — Clima mensal
+# Abas
 # ------------------------------------------------------------------
 aba1, aba2, aba3, aba4 = st.tabs(
-    ["📊 Clima mensal", "⚠️ Riscos agrícolas", "🐄 Conforto animal", "📅 Calendário por cultura"]
+    ["📊 Clima mensal", "⚠️ Riscos agrícolas", "🐄 Conforto animal",
+     "📅 Calendário por cultura"]
 )
 
+# ------------------------- ABA 1 ----------------------------------
 with aba1:
     st.subheader("Chuva e temperatura por mês")
 
     fig = go.Figure()
     fig.add_bar(x=resumo["mes_nome"], y=resumo["CHUVA_mm"],
                 name="Chuva (mm)", marker_color="steelblue", yaxis="y1")
- with aba1:
-    st.subheader("Chuva e temperatura por mês")
-
-    fig = go.Figure()
-    fig.add_bar(x=resumo["mes_nome"], y=resumo["CHUVA_mm"],
-                name="Chuva (mm)", marker_color="steelblue", yaxis="y1")
-    fig.add_scatter(x=resumo["mes_nome"], y=(resumo["TMAX_med"] + resumo["TMIN_med"]) / 2,
+    fig.add_scatter(x=resumo["mes_nome"], y=resumo["TMED_med"],
                     name="Temperatura média (°C)", mode="lines+markers",
                     line=dict(color="darkred", width=3), yaxis="y2")
-    fig.update_layout(
-        yaxis=dict(title="Chuva (mm)"),
-        yaxis2=dict(title="Temperatura (°C)", overlaying="y", side="right"),
-        legend=dict(orientation="h", yanchor="bottom", y=1.02),
-        height=450,
-    )
-    st.plotly_chart(fig, use_container_width=True)
     fig.update_layout(
         yaxis=dict(title="Chuva (mm)"),
         yaxis2=dict(title="Temperatura (°C)", overlaying="y", side="right"),
@@ -102,6 +96,7 @@ with aba1:
     fig2.update_layout(height=300, coloraxis_showscale=False)
     st.plotly_chart(fig2, use_container_width=True)
 
+# ------------------------- ABA 2 ----------------------------------
 with aba2:
     st.subheader("Riscos climáticos por mês")
 
@@ -119,24 +114,35 @@ with aba2:
     st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("### 🚨 Semáforo de risco por mês")
-    def semaforo(row):
-        if row["risco_geada"] >= 15: return "🔴 Alto (geada)"
-        if row["risco_seca"] >= 70: return "🟠 Alto (seca)"
-        if row["risco_seca"] >= 50: return "🟡 Moderado"
-        return "🟢 Baixo"
-    risco["semaforo"] = risco.apply(semaforo, axis=1)
-    st.dataframe(risco[["mes_nome","risco_seca","risco_geada","semaforo"]]
-                 .rename(columns={"mes_nome":"Mês","risco_seca":"Seca (%)",
-                                  "risco_geada":"Geada (%)","semaforo":"Classificação"}),
-                 use_container_width=True, hide_index=True)
 
+    def semaforo(row):
+        if row["risco_geada"] >= 15:
+            return "🔴 Alto (geada)"
+        if row["risco_seca"] >= 70:
+            return "🟠 Alto (seca)"
+        if row["risco_seca"] >= 50:
+            return "🟡 Moderado"
+        return "🟢 Baixo"
+
+    risco["semaforo"] = risco.apply(semaforo, axis=1)
+    st.dataframe(
+        risco[["mes_nome", "risco_seca", "risco_geada", "semaforo"]]
+        .rename(columns={"mes_nome": "Mês", "risco_seca": "Seca (%)",
+                         "risco_geada": "Geada (%)", "semaforo": "Classificação"}),
+        use_container_width=True, hide_index=True,
+    )
+
+# ------------------------- ABA 3 ----------------------------------
 with aba3:
     st.subheader("Índice de Temperatura e Umidade (ITU) — bovinos")
 
     def cor_itu(v):
-        if v <= 74:  return "green"
-        if v <= 79:  return "gold"
-        if v <= 84:  return "orange"
+        if v <= 74:
+            return "green"
+        if v <= 79:
+            return "gold"
+        if v <= 84:
+            return "orange"
         return "red"
 
     fig = go.Figure()
@@ -156,8 +162,7 @@ with aba3:
     st.info("ITU > 79 indica perigo de estresse térmico para bovinos. "
             "Em Londrina isso ocorre principalmente de novembro a abril.")
 
-with aba4:
-    st.subheader("Calendário agrícola de Londrina")
+# ------------------------- ABA 4 ----------------------------------
 with aba4:
     st.subheader("Calendário agrícola de Londrina")
 
@@ -174,6 +179,12 @@ with aba4:
     })
     st.dataframe(calendario, use_container_width=True, hide_index=True)
 
+    st.markdown("### 🗓️ Janelas de plantio e colheita")
+    try:
+        st.image("janelas_agricolas.png", use_container_width=True)
+    except Exception:
+        st.caption("Figura não encontrada no repositório.")
+
     st.markdown("### 📈 Série histórica anual")
     anual = diario.groupby("ano").agg(CHUVA=("PREC", "sum"),
                                       TMAX=("TMAX", "mean"),
@@ -186,3 +197,7 @@ with aba4:
     fig.update_layout(height=350, yaxis_title="Chuva anual (mm)",
                       xaxis_title="Ano")
     st.plotly_chart(fig, use_container_width=True)
+
+st.markdown("---")
+st.caption("Projeto Final — Computação Aplicada às Ciências Atmosféricas II · UEMA · "
+           "Dados processados em Python a partir do INMET (estação 83766).")
