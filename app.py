@@ -145,8 +145,10 @@ with aba3:
 
 with aba4:
     st.subheader("Calendário agrícola de Londrina")
+with aba4:
+    st.subheader("Calendário agrícola de Londrina")
 
-        calendario = pd.DataFrame({
+    calendario = pd.DataFrame({
         "Cultura": ["Soja", "Milho 1ª", "Milho safrinha", "Trigo"],
         "Plantio": ["Out-Dez", "Out-Dez", "Fev-Mar", "Abr-Mai"],
         "Colheita": ["Fev-Abr", "Fev-Mai", "Jul-Set", "Out-Dez"],
@@ -158,3 +160,16 @@ with aba4:
         ],
     })
     st.dataframe(calendario, use_container_width=True, hide_index=True)
+
+    st.markdown("### 📈 Série histórica anual")
+    anual = diario.groupby("ano").agg(CHUVA=("PREC", "sum"),
+                                      TMAX=("TMAX", "mean"),
+                                      TMED=("TMED", "mean"))
+
+    fig = go.Figure()
+    fig.add_scatter(x=anual.index, y=anual["CHUVA"],
+                    mode="lines+markers", name="Chuva total (mm)",
+                    line=dict(color="steelblue"))
+    fig.update_layout(height=350, yaxis_title="Chuva anual (mm)",
+                      xaxis_title="Ano")
+    st.plotly_chart(fig, use_container_width=True)
