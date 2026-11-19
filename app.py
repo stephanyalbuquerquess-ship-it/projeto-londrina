@@ -146,7 +146,15 @@ with aba3:
 with aba4:
     st.subheader("Calendário agrícola de Londrina")
 
-    calendario = pd.DataFrame({
-        "Cultura":       ["Soja",      "Milho 1ª", "Milho safrinha", "Trigo"],
-        "Plantio":       ["Out–Dez",   "Out–Dez",  "Fev–Mar",        "Abr–Mai"],
-        
+        calendario = pd.DataFrame({
+        "Cultura": ["Soja", "Milho 1ª", "Milho safrinha", "Trigo"],
+        "Plantio": ["Out-Dez", "Out-Dez", "Fev-Mar", "Abr-Mai"],
+        "Colheita": ["Fev-Abr", "Fev-Mai", "Jul-Set", "Out-Dez"],
+        "Risco principal": [
+            "Seca (veranico)",
+            "Seca",
+            "Geada / seca",
+            "Geada / chuva na colheita",
+        ],
+    })
+    st.dataframe(calendario, use_container_width=True, hide_index=True)
