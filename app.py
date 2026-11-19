@@ -71,9 +71,9 @@ with aba1:
     fig = go.Figure()
     fig.add_bar(x=resumo["mes_nome"], y=resumo["CHUVA_mm"],
                 name="Chuva (mm)", marker_color="steelblue", yaxis="y1")
-    fig.add_scatter(x=resumo["mes_nome"], y=resumo["TMED_med"],
-                    name="Temperatura média (°C)", mode="lines+markers",
-                    line=dict(color="darkred", width=3), yaxis="y2")
+   fig.add_scatter(x=resumo["mes_nome"], y=(resumo["TMAX_med"] + resumo["TMIN_med"]) / 2,
+                name="Temperatura média (°C)", mode="lines+markers",
+                line=dict(color="darkred", width=3), yaxis="y2")
     fig.update_layout(
         yaxis=dict(title="Chuva (mm)"),
         yaxis2=dict(title="Temperatura (°C)", overlaying="y", side="right"),
