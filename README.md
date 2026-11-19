@@ -30,20 +30,9 @@ O produto final pode ser acessado online através do link abaixo:
 *   `janelas_agricolas.png`: Gráfico de chuva mensal vs. janelas de plantio/colheita.
 *   `requirements.txt`: Bibliotecas necessárias para rodar o app.
 
-## 🧑‍💻 Como rodar o projeto localmente
-
-1. Clone este repositório:
-   ```bash
-   git clone https://github.com/seu-usuario/projeto-londrina.git
-
-   pip install -r requirements.txt
-   streamlit run app.py
-
-   👥 Autores
-[Stephany albuquerque]
-
-[yasmim lorrane]
-
-[ana beatriz]
-
-[pablo ryan]
+👩‍🔬 Autores
+🧑‍🎓 Integrante	✨ Contribuição
+Stephany Albuquerque	Desenvolvimento do Dashboard e Análise de Dados
+Yasmim Lorrane	Processamento de Dados e Gráficos
+Ana Beatriz	Revisão Teórica e Relatório
+Pablo Ryan	Análise Estatística e Apresentação
