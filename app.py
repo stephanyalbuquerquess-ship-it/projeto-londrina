@@ -146,7 +146,7 @@ with aba3:
 with aba4:
     st.subheader("Calendário agrícola de Londrina")
 
-       calendario = pd.DataFrame({
+        calendario = pd.DataFrame({
         "Cultura": ["Soja", "Milho 1ª", "Milho safrinha", "Trigo"],
         "Plantio": ["Out-Dez", "Out-Dez", "Fev-Mar", "Abr-Mai"],
         "Colheita": ["Fev-Abr", "Fev-Mai", "Jul-Set", "Out-Dez"],
