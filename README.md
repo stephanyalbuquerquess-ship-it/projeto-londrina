@@ -16,7 +16,7 @@ O produto final pode ser acessado online através do link abaixo:
 
 ## Tecnologias Utilizadas
 
-*   **Linguagem:** Python 3
+*   **Linguagem:** Python 
 *   **Processamento de Dados:** Pandas, NumPy
 *   **Visualização:** Matplotlib, Plotly
 *   **Desenvolvimento Web:** Streamlit
