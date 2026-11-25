@@ -31,8 +31,7 @@ O produto final pode ser acessado online através do link abaixo:
 *   `requirements.txt`: Bibliotecas necessárias para rodar o app.
 
 👩‍🔬 Autores
-🧑‍🎓 Integrante	✨ Contribuição
-Stephany Albuquerque	Desenvolvimento do Dashboard e Análise de Dados
-Yasmim Lorrane	Processamento de Dados e Gráficos
-Ana Beatriz	Revisão Teórica e Relatório
-Pablo Ryan	Análise Estatística e Apresentação
+Stephany Albuquerque	
+Yasmim Lorrane	
+Ana Beatriz	
+Pablo Ryan	
