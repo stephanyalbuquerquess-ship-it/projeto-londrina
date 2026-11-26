@@ -18,7 +18,7 @@ O produto final pode ser acessado online através do link abaixo:
 
 *   **Linguagem:** Python 
 *   **Processamento de Dados:** Pandas, NumPy
-*   **Visualização:** Matplotlib, Plotly
+*   **Visualização:** Matplotlib
 *   **Desenvolvimento Web:** Streamlit
 *   **Ambiente:** Google Colab
 
